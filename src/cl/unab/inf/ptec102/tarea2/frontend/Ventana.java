@@ -1,55 +1,61 @@
 package cl.unab.inf.ptec102.tarea2.frontend;
 
 import cl.unab.inf.ptec102.tarea2.backend.*;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Ventana extends JFrame {
     private JPanel panel1;
-    private JLabel Prueba;
+    private JLabel prueba;
     private JLabel tiempo;
     private JLabel cantPreguntas;
     private JButton iniciarPrueba;
     private JPanel botonera;
-    private JPanel cards;
+    private JPanel inicio;
     private JPanel panelPreguntas;
     private JButton atras;
     private JButton adelante;
     private JLabel tiempoLabel;
     private JLabel cantLabel;
     private JButton entregar;
-    private JButton guardar;
+    private JButton retroalimentacion;
+    private JLabel error;
     private Prueba backend;
     private int tarjetaActual = 0;
-    private List<Object> vistasPreguntas = new ArrayList<>();
+    private ArrayList<Object> preguntas = new ArrayList<>();
 
     public Ventana(Prueba backend) {
         this.setContentPane(this.panel1);
         this.backend = backend;
-        this.tiempo.setText(String.valueOf(backend.getTiempoTotal())+" min");
+        if (backend.getCantidadPreguntas() == 0) {
+            this.error.setText("No se pudieron cargar las preguntas");
+            this.error.setForeground(new Color(192, 0, 0));
+            this.error.setVisible(true);
+            this.iniciarPrueba.setVisible(false);
+            return;
+        }
+        this.tiempo.setText(backend.getTiempoTotal()+" min");
         this.cantPreguntas.setText(String.valueOf(backend.getCantidadPreguntas()));
 
         Resumen resumen  = new Resumen();
-        panelPreguntas.add(resumen.getPanel(), "resumenFinal");
+        this.panelPreguntas.add(resumen.getPanel(), "resumenFinal");
 
         for (int i = 0; i < backend.getCantidadPreguntas(); i++) {
             Pregunta data = backend.getPreguntaPos(i);
             if (data.getTipoPregunta() == 1) {
                 VisualPreguntaOM card = new VisualPreguntaOM();
-                card.populateFromModel((PreguntaOM) data);
-                panelPreguntas.add(card.getPanel(), "card" + i);
-                vistasPreguntas.add(card);
+                card.rellenarDatos((PreguntaOM) data);
+                this.panelPreguntas.add(card.getPanel(), "card" + i);
+                this.preguntas.add(card);
             }
             if (data.getTipoPregunta() == 2) {
                 VisualPreguntaVF card = new VisualPreguntaVF();
-                card.populateFromModel((PreguntaVF) data);
-                panelPreguntas.add(card.getPanel(), "card" + i);
-                vistasPreguntas.add(card);
+                card.rellenarDatos((PreguntaVF) data);
+                this.panelPreguntas.add(card.getPanel(), "card" + i);
+                this.preguntas.add(card);
             }
         }
 
@@ -65,66 +71,96 @@ public class Ventana extends JFrame {
         adelante.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                seed_preguntas(tarjetaActual);
-                CardLayout layout = (CardLayout) panelPreguntas.getLayout();
-                if (tarjetaActual == backend.getCantidadPreguntas()-2) {
-                    adelante.setVisible(false);
-                    entregar.setVisible(true);
-                    layout.show(panelPreguntas, "resumenFinal");
-                }
-                if (backend.getCantidadPreguntas()-1 > tarjetaActual) {
+                sincronizarRespuestas();
+                if (tarjetaActual < backend.getCantidadPreguntas() - 1) {
                     tarjetaActual++;
-                    layout.show(panelPreguntas, "card" + tarjetaActual);
+                    mostrarTarjeta(tarjetaActual);
                 }
-                if (tarjetaActual == 0) {atras.setVisible(false);}
-                else { atras.setVisible(true);                }
             }
         });
         atras.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                seed_preguntas(tarjetaActual);
-                if (tarjetaActual > 1 && tarjetaActual < backend.getCantidadPreguntas()) {
-                    atras.setVisible(true);
-                    adelante.setVisible(true);
-                    entregar.setVisible(false);
-                    CardLayout layout = (CardLayout) panelPreguntas.getLayout();
+                sincronizarRespuestas();
+                if (tarjetaActual > 0) {
                     tarjetaActual--;
-                    layout.show(panelPreguntas, "card"+tarjetaActual);
-                }
-                else if (tarjetaActual == 1) {
-                    CardLayout layout = (CardLayout) panelPreguntas.getLayout();
-                    tarjetaActual--;
-                    layout.show(panelPreguntas, "card"+tarjetaActual);
-                    atras.setVisible(false);
+                    mostrarTarjeta(tarjetaActual);
                 }
             }
         });
         entregar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                seed_preguntas(tarjetaActual);
-                CardLayout layout = (CardLayout) panelPreguntas.getLayout();
-                resumen.populateFromData(backend);
-                layout.show(panelPreguntas, "resumenFinal");
+                sincronizarRespuestas();
+                resumen.setRetroalimentacion(backend);
+                entrega();
+            }
+        });
+        retroalimentacion.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ((CardLayout) panelPreguntas.getLayout()).show(panelPreguntas, "card"+tarjetaActual);
+                mostrarRespuestas();
+                adelante.setVisible(true);
                 atras.setVisible(false);
-                adelante.setVisible(false);
+                retroalimentacion.setVisible(false);
             }
         });
     }
 
-    public void seed_preguntas(int tarjetaActual) {
-            Object vista = vistasPreguntas.get(tarjetaActual);
-            String respuesta = "";
-            if (vista instanceof VisualPreguntaOM) {
-                respuesta = ((VisualPreguntaOM) vista).getRespuestaSeleccionada();
-                ((VisualPreguntaOM) vista).setRespuestaSeleccionada(respuesta);
+    public void sincronizarRespuestas() {
+        String respuesta = "";
+        for (int i = 0; i < this.backend.getCantidadPreguntas(); i++) {
+            Object p = this.preguntas.get(i);
+            if (p instanceof VisualPreguntaOM) {
+                respuesta = ((VisualPreguntaOM) p).getRespuestaSeleccionada();
+                ((VisualPreguntaOM) p).setRespuestaSeleccionada(respuesta);
+
             }
-            else if (vista instanceof VisualPreguntaVF){
-                respuesta = ((VisualPreguntaVF) vista).getRespuestaSeleccionada();
-                ((VisualPreguntaVF) vista).setRespuestaSeleccionada(respuesta);
-                backend.guardarJustificacion(((VisualPreguntaVF) vista).getJustificacion(), tarjetaActual);
+            else if (p instanceof VisualPreguntaVF) {
+                respuesta = ((VisualPreguntaVF) p).getRespuestaSeleccionada();
+                ((VisualPreguntaVF) p).setRespuestaSeleccionada(respuesta);
+                this.backend.guardarJustificacion(((VisualPreguntaVF) p).getJustificacion(), i);
             }
-            backend.guardarRespuestas(respuesta, tarjetaActual);
+            this.backend.guardarRespuestas(respuesta, i);
+        }
     }
+
+    public void mostrarRespuestas() {
+        for (int i = 0; i < this.backend.getCantidadPreguntas(); i++) {
+            Object p = this.preguntas.get(i);
+            Pregunta data = this.backend.getPreguntaPos(i);
+            if (p instanceof VisualPreguntaOM) {
+                ((VisualPreguntaOM) p).mostrarRetroalimentacion((PreguntaOM) data);
+            }
+            else if (p instanceof VisualPreguntaVF) {
+                ((VisualPreguntaVF) p).mostrarRetroalimentacion((PreguntaVF) data);
+            }
+        }
+    }
+
+    public void actualizarBotonera() {
+        atras.setVisible(tarjetaActual > 0);
+        adelante.setVisible(tarjetaActual < backend.getCantidadPreguntas() - 1);
+        entregar.setVisible(tarjetaActual == backend.getCantidadPreguntas() - 1);
+    }
+
+    public void mostrarTarjeta(int index) {
+        CardLayout layout = (CardLayout) panelPreguntas.getLayout();
+        tarjetaActual = index;
+        layout.show(panelPreguntas, "card" + index);
+        actualizarBotonera();
+    }
+
+    public void entrega() {
+        CardLayout layout = (CardLayout) panelPreguntas.getLayout();
+        layout.show(panelPreguntas, "resumenFinal");
+        atras.setVisible(false);
+        adelante.setVisible(false);
+        entregar.setVisible(false);
+        retroalimentacion.setVisible(true);
+        tarjetaActual = 0;
+        entregar.setText("Ver resumen");
+    }
+
 }

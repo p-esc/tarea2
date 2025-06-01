@@ -16,19 +16,21 @@ public class Prueba {
             BufferedReader archivo = new BufferedReader(new FileReader("ejemplo1.csv"));
 
             String linea = archivo.readLine();
+            int i = 1;
             while(linea != null){
                 String[] datos = linea.split(";");
-                int tipo = Integer.parseInt(datos[1]);
+                int tipo = Integer.parseInt(datos[0]);
                 if (tipo == 2) {
-                    Pregunta nuevo = new PreguntaVF(Integer.parseInt(datos[0]), Integer.parseInt(datos[1]), datos[2], Integer.parseInt(datos[3]), Integer.parseInt(datos[4]), datos[5], datos[6]);
+                    Pregunta nuevo = new PreguntaVF(i, tipo, datos[1], Integer.parseInt(datos[2]), Integer.parseInt(datos[3]), datos[4], datos[5]);
                     this.preguntas.add(nuevo);
                 }
                 else {
-                    String[] alternativas = datos[6].split("-");
-                    Pregunta nuevo = new PreguntaOM(Integer.parseInt(datos[0]), Integer.parseInt(datos[1]), datos[2], Integer.parseInt(datos[3]), Integer.parseInt(datos[4]), datos[5], alternativas);
+                    String[] alternativas = datos[5].split("-");
+                    Pregunta nuevo = new PreguntaOM(i, tipo, datos[1], Integer.parseInt(datos[2]), Integer.parseInt(datos[3]), datos[4], alternativas);
                     this.preguntas.add(nuevo);
                 }
                 linea = archivo.readLine();
+                i++;
             }
             archivo.close();
 
@@ -45,7 +47,6 @@ public class Prueba {
         return this.preguntas.stream().mapToInt(Pregunta::getTiempoEstimado).sum();
     }
 
-
     public int calcularRespuestasCorrectas() {
         int correctas = 0;
         for (Pregunta pregunta : this.preguntas) {
@@ -56,7 +57,7 @@ public class Prueba {
         return correctas;
     }
 
-    public float porcentajePreguntasNivel(int nivel) {
+    public String porcentajePreguntasNivel(int nivel) {
         float correctas = 0;
         float n = 0;
         for (Pregunta pregunta : this.preguntas) {
@@ -67,10 +68,13 @@ public class Prueba {
                 }
             }
         }
-        return correctas/n*100;
+        if (n != 0) {
+            return Float.toString(correctas / n * 100)+"%";
+        }
+        return "--";
     }
 
-    public float calcularPorcentajePorTipo(int tipo) {
+    public String calcularPorcentajePorTipo(int tipo) {
         float correctas = 0;
         float n = 0;
         for (Pregunta p : this.preguntas) {
@@ -81,7 +85,10 @@ public class Prueba {
                 }
             }
         }
-        return correctas / n * 100;
+        if (n != 0) {
+            return Float.toString(correctas / n * 100)+"%";
+        }
+        return "--";
     }
 
     public Pregunta getPreguntaPos(int posicion) {
@@ -95,5 +102,6 @@ public class Prueba {
     public void guardarJustificacion(String justificacion, int id) {
         this.preguntas.get(id).setJustificacionUsuario(justificacion);
     }
+
 }
 

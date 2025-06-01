@@ -2,8 +2,8 @@ package cl.unab.inf.ptec102.tarea2.frontend;
 
 import cl.unab.inf.ptec102.tarea2.backend.*;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 
 public class VisualPreguntaVF {
     private JPanel panel;
@@ -13,9 +13,12 @@ public class VisualPreguntaVF {
     private JRadioButton falso;
     private JTextField justificacion;
     private JLabel justificacionLabel;
-    private Prueba backend;
+    private JLabel justificacionEsperada;
+    private JLabel justEspLabel;
+    private JLabel icono;
 
     ButtonGroup opciones = new ButtonGroup();
+
     public VisualPreguntaVF() {
         opciones.add(verdadero);
         opciones.add(falso);
@@ -46,7 +49,7 @@ public class VisualPreguntaVF {
         return this.panel;
     }
 
-    public void populateFromModel(PreguntaVF preguntas) {
+    public void rellenarDatos(PreguntaVF preguntas) {
         this.titulo.setText("Pregunta "+preguntas.getId());
         this.enunciado.setText(preguntas.getEnunciado());
     }
@@ -72,6 +75,33 @@ public class VisualPreguntaVF {
         } else if (valor.equals("FALSE")) {
             falso.setSelected(true);
         }
+    }
+
+    public void mostrarRetroalimentacion (PreguntaVF pregunta) {
+        String respuesta = pregunta.getRespuestaCorrecta();
+        String justificacion = pregunta.getJustificacion();
+        Color verde = new Color(67, 144, 40);
+        if (pregunta.esCorrecta()) {
+            icono.setText("✔");
+            icono.setForeground(verde);
+        }
+        else {
+            icono.setText("✘");
+            icono.setForeground(new Color(192, 0, 0));
+        }
+        if (respuesta.equals("TRUE")) {
+            this.verdadero.setBackground(verde);
+        }
+        else {
+            this.falso.setBackground(verde);
+        }
+        this.icono.setVisible(true);
+        this.verdadero.setEnabled(false);
+        this.falso.setEnabled(false);
+        this.justificacion.setEditable(false);
+        this.justificacionEsperada.setText(justificacion);
+        this.justificacionEsperada.setVisible(true);
+        this.justEspLabel.setVisible(true);
     }
 }
 

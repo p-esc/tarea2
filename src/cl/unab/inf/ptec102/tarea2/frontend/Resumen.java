@@ -15,21 +15,19 @@ public class Resumen extends JPanel {
     private JLabel vf;
     private JLabel om;
     private JPanel panel;
-    private Prueba backend;
 
-    public void populateFromData (Prueba backend) {
-        this.backend = backend;
-        this.recordar.setText("Recordar: "+String.valueOf(backend.porcentajePreguntasNivel(1))+"%");
-        this.entender.setText("Entender: "+String.valueOf(backend.porcentajePreguntasNivel(2))+"%");
-        this.aplicar.setText("Aplicar: "+String.valueOf(backend.porcentajePreguntasNivel(3))+"%");
-        this.analizar.setText("Analizar: "+String.valueOf(backend.porcentajePreguntasNivel(4))+"%");
-        this.evaluar.setText("Evaluar: "+String.valueOf(backend.porcentajePreguntasNivel(5))+"%");
-        this.crear.setText("Crear: "+String.valueOf(backend.porcentajePreguntasNivel(6))+"%");
+    public void setRetroalimentacion(Prueba backend) {
+        this.recordar.setText("Recordar: "+backend.porcentajePreguntasNivel(1));
+        this.entender.setText("Entender: "+backend.porcentajePreguntasNivel(2));
+        this.aplicar.setText("Aplicar: "+backend.porcentajePreguntasNivel(3));
+        this.analizar.setText("Analizar: "+backend.porcentajePreguntasNivel(4));
+        this.evaluar.setText("Evaluar: "+backend.porcentajePreguntasNivel(5));
+        this.crear.setText("Crear: "+backend.porcentajePreguntasNivel(6));
 
-        this.vf.setText("Verdadero y falso: "+String.valueOf(backend.calcularPorcentajePorTipo(2))+"%");
-        this.om.setText("Opción múltiple: "+String.valueOf(backend.calcularPorcentajePorTipo(1))+"%");
+        this.vf.setText("Verdadero y falso: "+backend.calcularPorcentajePorTipo(2));
+        this.om.setText("Opción múltiple: "+backend.calcularPorcentajePorTipo(1));
 
-        this.respCorrectas.setText("Respuestas correctas: "+String.valueOf(backend.calcularRespuestasCorrectas()));
+        this.respCorrectas.setText("Respuestas correctas: "+backend.calcularRespuestasCorrectas()+"/"+backend.getCantidadPreguntas());
     }
 
     public JPanel getPanel(){

@@ -7,6 +7,7 @@ public abstract class Pregunta {
     protected int tiempoEstimado;
     protected int nivelBloom;
     protected String respuestaUsuario;
+    protected String respuestaCorrecta;
 
     public Pregunta(int id, int tipo, String enunciado, int nivelBloom, int tiempoEstimado) {
         this.id = id;
@@ -16,21 +17,20 @@ public abstract class Pregunta {
         this.tiempoEstimado = tiempoEstimado;
     }
 
-    public abstract boolean esCorrecta();
-    public abstract String getTipo();
+    public boolean esCorrecta() {
+        if (this.respuestaUsuario == null) {return false;}
+        return this.respuestaUsuario.equalsIgnoreCase(respuestaCorrecta);
+    }
 
     public int getTipoPregunta() {
         return this.tipo;
     }
+    public String getRespuestaCorrecta() { return this.respuestaCorrecta; }
     public void setRespuestaUsuario(String respuestaUsuario) {this.respuestaUsuario = respuestaUsuario;}
-
-    public String getRespuestaUsuario() {
-        return this.respuestaUsuario;
-    }
+    public abstract String getJustificacion();
     public int getNivelBloom() { return this.nivelBloom; }
     public int getTiempoEstimado() { return this.tiempoEstimado; }
     public String getEnunciado() { return this.enunciado; }
     public int getId() { return this.id; }
-
     public abstract void setJustificacionUsuario(String justificacion);
 }

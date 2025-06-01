@@ -1,8 +1,9 @@
 package cl.unab.inf.ptec102.tarea2.frontend;
 import cl.unab.inf.ptec102.tarea2.backend.*;
 import javax.swing.*;
-import javax.swing.text.html.MinimalHTMLWriter;
-import java.util.Objects;
+import java.awt.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class VisualPreguntaOM extends JPanel {
     private JPanel panel;
@@ -12,45 +13,66 @@ public class VisualPreguntaOM extends JPanel {
     private JRadioButton c;
     private JRadioButton d;
     private JLabel enunciado;
+    private JLabel icono;
+    private List<JRadioButton> botones;
 
     ButtonGroup alternativas = new ButtonGroup();
     public VisualPreguntaOM() {
-        this.alternativas.add(a);
-        this.alternativas.add(b);
-        this.alternativas.add(c);
-        this.alternativas.add(d);
+        this.botones = Arrays.asList(a,b,c,d);
+        for (JRadioButton boton : botones) {
+            alternativas.add(boton);
+        }
     }
 
     public JPanel getPanel(){
         return this.panel;
     }
 
-    public void populateFromModel(PreguntaOM preguntas) {
+    public void rellenarDatos(PreguntaOM preguntas) {
         this.titulo.setText("Pregunta "+preguntas.getId());
         this.enunciado.setText(preguntas.getEnunciado());
-        this.a.setText(preguntas.getOpciones()[0]);
-        this.b.setText(preguntas.getOpciones()[1]);
-        this.c.setText(preguntas.getOpciones()[2]);
-        this.d.setText(preguntas.getOpciones()[3]);
+        int i = 0;
+        for (JRadioButton boton : botones) {
+            boton.setText(preguntas.getOpciones()[i]);
+            i++;
+        }
     }
 
     public void setRespuestaSeleccionada(String opcion) {
         if (opcion == null) return;
-        switch (opcion) {
-            case "a": a.setSelected(true); break;
-            case "b": b.setSelected(true); break;
-            case "c": c.setSelected(true); break;
-            case "d": d.setSelected(true); break;
-            default: break;
+        for (JRadioButton boton : botones) {
+            if (opcion.equalsIgnoreCase(boton.getName())) {
+                boton.setSelected(true);
+            }
         }
     }
 
     public String getRespuestaSeleccionada() {
-        if (a.isSelected()) { return "a"; }
-        if (b.isSelected()) { return "b"; }
-        if (c.isSelected()) { return "c"; }
-        if (d.isSelected()) { return "d"; }
+        for (JRadioButton boton : botones) {
+            if (boton.isSelected()) return boton.getName();
+        }
         return null;
     }
 
+    public void mostrarRetroalimentacion (PreguntaOM pregunta) {
+        String respuesta = pregunta.getRespuestaCorrecta();
+        Color verde = new Color(67, 144, 40);
+        String[] letras = {"a", "b", "c", "d"};
+        if (pregunta.esCorrecta()) {
+            this.icono.setText("✔");
+            this.icono.setForeground(verde);
+        }
+        else {
+            this.icono.setText("✘");
+            this.icono.setForeground(new Color(192, 0, 0));
+        }
+        for (int i = 0; i < botones.size(); i++) {
+            JRadioButton boton = botones.get(i);
+            boton.setEnabled(false);
+            if (respuesta.equalsIgnoreCase(letras[i])) {
+                boton.setBackground(verde);
+            }
+        }
+        this.icono.setVisible(true);
+    }
 }

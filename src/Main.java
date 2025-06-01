@@ -7,8 +7,8 @@ public class Main {
     public static void main(String[] args) {
         Prueba backend = new Prueba();
         Ventana frontend = new Ventana(backend);
-
-        frontend.setSize(480,300);
+        frontend.setTitle("Prueba");
+        frontend.setSize(480,310);
         frontend.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frontend.setLocationRelativeTo(null);
         frontend.setVisible(true);

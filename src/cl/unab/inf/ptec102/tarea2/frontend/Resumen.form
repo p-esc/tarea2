@@ -42,7 +42,7 @@
       </component>
       <component id="77928" class="javax.swing.JLabel" binding="vf">
         <constraints>
-          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="3" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Verdadero y falso:"/>
@@ -58,7 +58,7 @@
         <children>
           <component id="9d150" class="javax.swing.JLabel" binding="recordar">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="3" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value="1. Recordar: --"/>
@@ -66,7 +66,7 @@
           </component>
           <component id="e6496" class="javax.swing.JLabel" binding="entender">
             <constraints>
-              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="3" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value="2. Entender: --"/>
@@ -74,7 +74,7 @@
           </component>
           <component id="742ae" class="javax.swing.JLabel" binding="crear">
             <constraints>
-              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="3" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value="6. Crear: --"/>
@@ -82,7 +82,7 @@
           </component>
           <component id="f8c11" class="javax.swing.JLabel" binding="evaluar">
             <constraints>
-              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="3" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value="5. Evaluar: --"/>
@@ -90,7 +90,7 @@
           </component>
           <component id="dcb09" class="javax.swing.JLabel" binding="aplicar">
             <constraints>
-              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="3" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value="3. Aplicar: --"/>
@@ -98,7 +98,7 @@
           </component>
           <component id="25c08" class="javax.swing.JLabel" binding="analizar">
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="3" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value="4: Analizar: --"/>
@@ -108,7 +108,7 @@
       </grid>
       <component id="a722b" class="javax.swing.JLabel" binding="om">
         <constraints>
-          <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="3" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Opción Múltiple:"/>

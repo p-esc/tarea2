@@ -2,7 +2,6 @@ package cl.unab.inf.ptec102.tarea2.backend;
 
 public class PreguntaOM extends Pregunta {
     private String[] opciones;
-    private String respuestaCorrecta;
 
     public PreguntaOM(int id, int tipo, String enunciado, int nivelBloom, int tiempoEstimado, String respuestaCorrecta,  String[] opciones) {
         super(id, tipo, enunciado, nivelBloom, tiempoEstimado);
@@ -11,19 +10,12 @@ public class PreguntaOM extends Pregunta {
     }
 
     @Override
-    public boolean esCorrecta() {
-        if (respuestaUsuario == null) {return false;}
-        return respuestaCorrecta.equalsIgnoreCase(respuestaUsuario);
+    public String getJustificacion() {
+        return "";
     }
 
     @Override
-    public String getTipo() {
-        return "OPCION_MULTIPLE";
-    }
-
-    @Override
-    public void setJustificacionUsuario(String justificacion) {
-    }
+    public void setJustificacionUsuario(String justificacion) {}
 
     public String[] getOpciones() { return opciones; }
 }
