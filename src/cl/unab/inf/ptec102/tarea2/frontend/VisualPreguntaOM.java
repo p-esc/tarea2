@@ -48,9 +48,10 @@ public class VisualPreguntaOM extends JPanel {
     }
 
     public String getRespuestaSeleccionada() {
-        for (JRadioButton boton : botones) {
-            if (boton.isSelected()) return boton.getName();
-        }
+        if (a.isSelected()) { return "a"; }
+        if (b.isSelected()) { return "b"; }
+        if (c.isSelected()) { return "c"; }
+        if (d.isSelected()) { return "d"; }
         return null;
     }
 
